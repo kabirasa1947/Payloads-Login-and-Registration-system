@@ -100,9 +100,3 @@ Performing LDAP injection attacks on systems without proper authorization is ill
 Always obtain permission from the system owner and conduct security testing responsibly and within legal boundaries. 
 Additionally, organizations should implement proper input validation and parameterized queries to mitigate the risk of LDAP injection vulnerabilities.
 
-
-
-
-
-
-
